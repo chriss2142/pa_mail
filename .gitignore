@@ -3,3 +3,4 @@ node_modules/
 .DS_Store
 *.log
 output.txt
+speech.mp3
