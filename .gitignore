@@ -4,3 +4,4 @@ node_modules/
 *.log
 output.txt
 speech.mp3
+matrix-storage.json
