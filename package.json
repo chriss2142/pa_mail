@@ -11,6 +11,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "imap-simple": "^5.1.0",
-    "mailparser": "^3.7.2"
+    "mailparser": "^3.7.2",
+    "openai": "^4.76.1"
   }
 }

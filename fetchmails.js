@@ -4,6 +4,13 @@ const path = require('path');
 const simpleParser = require('mailparser').simpleParser;
 require('dotenv').config();
 
+const OpenAI = require('openai');
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
 // Configuration for IMAP connection
 const config = {
     imap: {
@@ -210,6 +217,26 @@ function filterEmails(mails, blacklist) {
 }
 
 
+async function processWithGPT(content) {
+    try {
+        // Read the prompt from prompt.txt using promises
+        const prompt = await fs.promises.readFile('promt.txt', 'utf8');
+        
+        const response = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [
+                { role: "system", content: prompt },
+                { role: "user", content: content }
+            ],
+            temperature: 0.7,
+        });
+
+        return response.choices[0].message.content;
+    } catch (error) {
+        console.error('Error processing with GPT:', error);
+        return 'Error processing content with GPT';
+    }
+}
 
 
 
@@ -235,7 +262,10 @@ async function main() {
     //console.log('-------------------------------------------------');
     const processedTextWithLinks = await createTextFromMails(filteredMails);
     const processedTextWithoutLinks = await createTextFromMailsWithoutLinks(filteredMails);
-    console.log(processedTextWithoutLinks);
+    
+    // Process with GPT and log the result
+    const gptResult = await processWithGPT(processedTextWithoutLinks);
+    console.log(gptResult);
 }
 
 async function debug() {    
