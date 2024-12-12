@@ -152,7 +152,7 @@ async function createTextFromMailsWithoutLinks(mailsArray) {
     for (const mail of mailsArray) {
         textBlob += `\nFrom: ${mail.from}\n`;
         textBlob += `Subject: ${mail.subject}\n`;
-        textBlob += `Date: ${mail.date}\n`;
+        //textBlob += `Date: ${mail.date}\n`;
         
         let cleanBody = mail.body || mail.subject || '';
         
@@ -251,7 +251,23 @@ async function main() {
         'info@members.netflix.com',
         '@members.netflix.com',
         'newsletter@news.native-instruments.com',
-        'notifications-noreply@linkedin.com'
+        'notifications-noreply@linkedin.com',
+        '@codepen.io',
+        '@ideas.pinterest.com',
+        '@news.native-instruments.com',
+        '@mercedes-benz-ag.die-niederlassungen.de',
+        'updates-noreply@linkedin.com',
+        '@steampowered.com',
+        '@dhl.de',
+        'mfritz31@outlook.de',
+        '@amazon.de',
+        'noreply@tm.openai.com',
+        'newsletter@payback.de',
+        '@paypal.com',
+        '@paypal.de',
+        '@immobilienscout24.de',
+        '@immowelt.de',
+        'reply@dai-heidelberg.de'
     ];
 
 
@@ -265,7 +281,9 @@ async function main() {
     
     // Process with GPT and log the result
     const gptResult = await processWithGPT(processedTextWithoutLinks);
-    console.log(gptResult);
+    
+    // Write the result to output.txt, overwriting if it exists
+    fs.writeFileSync('output.txt', gptResult, 'utf8');
 }
 
 async function debug() {    
