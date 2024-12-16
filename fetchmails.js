@@ -228,7 +228,7 @@ async function processWithGPT(content) {
                 { role: "system", content: prompt },
                 { role: "user", content: content }
             ],
-            temperature: 0.7,
+            temperature: 0.3,
         });
 
         return response.choices[0].message.content;
@@ -250,6 +250,28 @@ async function loadBlacklist() {
     }
 }
 
+function validateAndFilterSummaries(text) {
+    // Pattern to match entire blocks from "From:" to "-------------------"
+    const pattern = /From:.*?-------------------/gs;
+    
+    // Find all matches in the text
+    const matches = text.match(pattern);
+    
+    if (!matches) {
+        return text;
+    }
+    
+    // Remove all matched blocks from the text
+    let cleanedText = text;
+    matches.forEach(match => {
+        cleanedText = cleanedText.replace(match, '');
+    });
+    
+    // Clean up any remaining whitespace
+    return cleanedText.trim();
+}
+
+
 
 
 // Wrap the execution in an async function
@@ -263,9 +285,10 @@ async function main() {
     
     // Process with GPT and log the result
     const gptResult = await processWithGPT(processedTextWithoutLinks);
+    const validatedResult = validateAndFilterSummaries(gptResult);
     
     // Write the result to output.txt, overwriting if it exists
-    fs.writeFileSync('output.txt', gptResult, 'utf8');
+    fs.writeFileSync('output.txt', validatedResult, 'utf8');
 }
 
 // Call the main function

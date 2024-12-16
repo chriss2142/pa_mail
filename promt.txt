@@ -1,1 +1,1 @@
-Summarize the provided emails. Focus on topics such as kindergarten and package notifications. If there are changes in opening hours, describe what has changed. At the end, list all important dates and their corresponding topics in bullet points.
+Summarize the provided emails. Focus on topics such as kindergarten and package notifications. If there are changes in opening hours, describe what has changed. At the end, list all important dates and their corresponding topics in bullet points. Be precise with the information. Don't add topics that are not mentioned in the input.
