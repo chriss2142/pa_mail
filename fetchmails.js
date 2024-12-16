@@ -238,44 +238,26 @@ async function processWithGPT(content) {
     }
 }
 
+// Replace the hardcoded blacklist array with this function
+async function loadBlacklist() {
+    try {
+        const content = await fs.promises.readFile('blacklist.txt', 'utf8');
+        // Split by both \n and \r\n, filter out empty lines
+        return content.split(/\r?\n/).filter(line => line.trim().length > 0);
+    } catch (error) {
+        console.error('Error reading blacklist.txt:', error);
+        return []; // Return empty array as fallback
+    }
+}
 
 
 
 // Wrap the execution in an async function
 async function main() {
 
-    // Example blacklist with both full emails and domains
-    const blacklist = [
-        'news@mail.xing.com',
-        'hello@mail.blinkist.com',
-        'info@members.netflix.com',
-        '@members.netflix.com',
-        'newsletter@news.native-instruments.com',
-        'notifications-noreply@linkedin.com',
-        '@codepen.io',
-        '@ideas.pinterest.com',
-        '@news.native-instruments.com',
-        '@mercedes-benz-ag.die-niederlassungen.de',
-        'updates-noreply@linkedin.com',
-        '@steampowered.com',
-        '@dhl.de',
-        'mfritz31@outlook.de',
-        '@amazon.de',
-        'noreply@tm.openai.com',
-        'newsletter@payback.de',
-        '@paypal.com',
-        '@paypal.de',
-        '@immobilienscout24.de',
-        '@immowelt.de',
-        'reply@dai-heidelberg.de'
-    ];
-
-
+    const blacklist = await loadBlacklist();
     const mails = await fetchEmails();
     const filteredMails = filterEmails(mails, blacklist);
-    //console.log(filteredMails.map(mail => mail.from));
-    //console.log(filteredMails);
-    //console.log('-------------------------------------------------');
     const processedTextWithLinks = await createTextFromMails(filteredMails);
     const processedTextWithoutLinks = await createTextFromMailsWithoutLinks(filteredMails);
     
@@ -286,22 +268,5 @@ async function main() {
     fs.writeFileSync('output.txt', gptResult, 'utf8');
 }
 
-async function debug() {    
-    // Example usage
-    const emails = [
-        { from: 'XING News Internet & Telekommunikation <news@mail.xing.com>' },
-        { from: 'Other Sender <user@otherdomain.com>' },
-        { from: 'No Email' },
-    ];
-
-    const blacklist = ['news@mail.xing.com', '@otherdomain.com'];
-
-    const filteredEmails = filterEmails(emails, blacklist);
-    console.log(filteredEmails);
-}
-
-
 // Call the main function
 main().catch(console.error);
-//debug();
-
