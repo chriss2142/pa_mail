@@ -6,6 +6,16 @@ Brief description of your project
 
 Installation steps here
 
+### Prerequisites
+#### Balacklist
+File: blacklist.txt
+
+example:
+```
+example@example.com
+@example.com
+```
+
 ## Environment Variables
 
 | Variable | Description |

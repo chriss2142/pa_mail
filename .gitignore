@@ -5,3 +5,4 @@ node_modules/
 output.txt
 speech.mp3
 matrix-storage.json
+blacklist.txt
