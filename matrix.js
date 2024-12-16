@@ -8,6 +8,17 @@ const accessToken = process.env.PA_MATRIX_TOKEN; // Replace with your access tok
 const targetUserId = process.env.PA_MATRIX_TARGET_USER; // Replace with the target Matrix user ID
 const mp3FilePath = "speech.mp3"; // Replace with the path to your MP3 file
 
+
+// Verify environment variables
+if (!homeserverUrl || !accessToken || !targetUserId) {
+    console.error("Error: Missing configuration. Check your environment variables.");
+    process.exit(1);
+}
+
+console.log("Connecting to:", homeserverUrl);
+console.log("Access Token (partial):", accessToken.slice(0, 5) + "...");
+
+
 async function sendFile() {
     try {
         // Initialize the client
@@ -18,6 +29,7 @@ async function sendFile() {
         AutojoinRoomsMixin.setupOnClient(client);
 
         // Start the client
+        console.log(`Connecting as ${await client.getUserId()} to ${homeserverUrl}`);
         await client.start();
         console.log("Matrix client started.");
 
